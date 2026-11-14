@@ -3,6 +3,7 @@ main = "src/worker.js"
 compatibility_date = "2025-09-01"
 
 [vars]
+ADMIN_PASSWORD = "ehsan2005"
 GOLD_PRICE_PER_GRAM_TOMAN = "10500000"
 
 # D1 database. With no database_id, `wrangler deploy` creates and binds it automatically.
@@ -12,4 +13,5 @@ binding = "DB"
 database_name = "melligold"
 
 # Secrets (set in the Cloudflare dashboard, not here):
-#   MELLIGOLD_API_KEY, ADMIN_PASSWORD
+#   MELLIGOLD_API_KEY
+# (ADMIN_PASSWORD is a plain var above; a Secret with the same name would block deploys.)
