@@ -1,4 +1,4 @@
-name = "melligold-mock"
+name = "melligold-data-source"
 main = "src/worker.js"
 compatibility_date = "2025-09-01"
 
