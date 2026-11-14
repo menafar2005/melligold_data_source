@@ -1,30 +1,38 @@
 # melligold-mock
 
-سرویس ساختگی ملی گلد برای دمو: دیتابیس SQLite، یک API برای پلاگین دیدار و یک پنل ادمین ساده.
+سرویس ساختگی ملی گلد برای دمو، روی Cloudflare Workers + D1 (SQLite): یک API برای پلاگین دیدار و یک پنل ادمین ساده.
 
-## اجرا
+## اجرای محلی
 
 ```bash
 npm install
-cp .env.example .env     # در ویندوز: copy .env.example .env  ← سپس مقادیر را پر کنید
-npm run seed             # دیتابیس را خالی و ۵ کاربر نمونه را وارد می‌کند
-npm start                # یا npm run dev
 ```
 
-متغیرهای `.env`:
+فایل `.dev.vars` بساز (در `.gitignore` است):
 
-| متغیر | کار | نمونه |
-|---|---|---|
-| `PORT` | پورت (پیش‌فرض ۴۰۰۰) | `4000` |
-| `MELLIGOLD_API_KEY` | کلید مشترک با پلاگین | رشته‌ی تصادفی |
-| `GOLD_PRICE_PER_GRAM_TOMAN` | قیمت ثابت هر گرم | `10500000` |
-| `ADMIN_PASSWORD` | رمز پنل ادمین (کاربر `admin`) | — |
-| `DB_PATH` | مسیر فایل SQLite | `data/melligold.db` |
+```
+MELLIGOLD_API_KEY=یک-رشته-تصادفی
+ADMIN_PASSWORD=رمز-ادمین
+```
+
+```bash
+npm start        # wrangler dev → http://localhost:8787
+```
+
+بعد از اولین اجرا در `/admin` دکمه‌ی «بازگردانی داده‌ی نمونه» ۵ کاربر نمونه را وارد می‌کند (جدول‌ها خودکار ساخته می‌شوند).
+
+## دیپلوی روی Cloudflare (اتصال به GitHub)
+
+1. در Workers & Pages پروژه را از ریپوی GitHub بساز؛ Deploy command همان `npx wrangler deploy` است.
+2. `wrangler deploy` دیتابیس D1 با نام `melligold` را خودش می‌سازد و به `DB` وصل می‌کند.
+3. در Settings ← Variables and Secrets این دو **Secret** را اضافه کن: `MELLIGOLD_API_KEY` و `ADMIN_PASSWORD`.
+4. قیمت هر گرم در `wrangler.toml` (`GOLD_PRICE_PER_GRAM_TOMAN`) است.
+5. `https://<worker>.workers.dev/admin` را باز کن و داده‌ی نمونه را وارد کن.
 
 ## API
 
 ```bash
-curl -H "X-API-Key: $MELLIGOLD_API_KEY" http://localhost:4000/api/v1/users/by-mobile/09121234567
+curl -H "X-API-Key: $MELLIGOLD_API_KEY" https://<worker>.workers.dev/api/v1/users/by-mobile/09121234567
 ```
 
 پاسخ `200`: `user` و `gold` (`grams`، `pricePerGramToman`، `valueToman`، `updatedAt`).
@@ -32,7 +40,4 @@ curl -H "X-API-Key: $MELLIGOLD_API_KEY" http://localhost:4000/api/v1/users/by-mo
 
 ## پنل ادمین
 
-`http://localhost:4000/admin` — Basic Auth با کاربر `admin` و رمز `ADMIN_PASSWORD`.
-ساخت کاربر، تغییر موجودی و حذف کاربر؛ تغییرها بلافاصله در API دیده می‌شوند.
-
-`GET /healthz` برای چک ساده.
+`/admin` — Basic Auth با کاربر `admin` و رمز `ADMIN_PASSWORD`. ساخت کاربر، تغییر موجودی و حذف؛ تغییرها بلافاصله در API دیده می‌شوند. `GET /healthz` برای چک ساده.

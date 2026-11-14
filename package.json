@@ -1,18 +1,15 @@
 {
   "name": "melligold-mock",
-  "version": "1.0.0",
-  "description": "Mock Melligold service (demo): SQLite + API + admin panel",
-  "main": "src/server.js",
+  "version": "2.0.0",
+  "description": "Mock Melligold service (demo): Cloudflare Worker + D1 + API + admin panel",
   "private": true,
-  "engines": { "node": ">=20" },
+  "type": "module",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "node --watch src/server.js",
-    "seed": "node scripts/seed.js"
+    "start": "wrangler dev",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
   },
-  "dependencies": {
-    "better-sqlite3": "^12.0.0",
-    "dotenv": "^16.4.5",
-    "express": "^4.21.0"
+  "devDependencies": {
+    "wrangler": "^4.0.0"
   }
 }

@@ -1,4 +1,3 @@
-'use strict';
 const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -11,7 +10,7 @@ function formatTime(iso) {
   return new Intl.DateTimeFormat('fa-IR', { dateStyle: 'short', timeStyle: 'medium', timeZone: 'Asia/Tehran' }).format(d);
 }
 
-function renderAdmin({ users, price, valueToman, errors = [], form = {} }) {
+export function renderAdmin({ users, price, valueToman, errors = [], form = {} }) {
   const rows = users
     .map(
       (u) => `<tr>
@@ -83,10 +82,11 @@ function renderAdmin({ users, price, valueToman, errors = [], form = {} }) {
 ${rows || '<tr><td colspan="6">کاربری وجود ندارد.</td></tr>'}
       </tbody>
     </table>
+    <form method="post" action="/admin/seed" onsubmit="return confirm('همه‌ی کاربران پاک و داده‌ی نمونه جایگزین شود؟')">
+      <p><button type="submit" class="danger">بازگردانی داده‌ی نمونه (۵ کاربر)</button></p>
+    </form>
   </div>
 </main>
 </body>
 </html>`;
 }
-
-module.exports = { renderAdmin };

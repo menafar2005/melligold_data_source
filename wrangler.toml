@@ -1,0 +1,15 @@
+name = "melligold-mock"
+main = "src/worker.js"
+compatibility_date = "2025-09-01"
+
+[vars]
+GOLD_PRICE_PER_GRAM_TOMAN = "10500000"
+
+# D1 database. With no database_id, `wrangler deploy` creates and binds it automatically.
+# The schema is created on first request (CREATE TABLE IF NOT EXISTS), no migration needed.
+[[d1_databases]]
+binding = "DB"
+database_name = "melligold"
+
+# Secrets (set in the Cloudflare dashboard, not here):
+#   MELLIGOLD_API_KEY, ADMIN_PASSWORD
