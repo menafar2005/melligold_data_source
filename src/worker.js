@@ -67,7 +67,9 @@ async function handle(request, env) {
   const m = pathname.match(/^\/api\/v1\/users\/by-mobile\/([^/]+)$/);
   if (m && method === 'GET') {
     const key = request.headers.get('X-API-Key');
-    if (!key || !(await safeEqual(key, env.MELLIGOLD_API_KEY))) return json({ error: 'unauthorized' }, 401);
+    if (!key || !(await safeEqual(key.trim(), String(env.MELLIGOLD_API_KEY).trim()))) {
+      return json({ error: 'unauthorized' }, 401);
+    }
     const mobile = decodeURIComponent(m[1]);
     if (!MOBILE_RE.test(mobile)) return json({ error: 'invalid_mobile' }, 400);
     const row = await getByMobile(env.DB, mobile);
